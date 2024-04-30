@@ -64,22 +64,51 @@ class Game {
         this.possibleAnswers = [...allWords];
 
         // Correct letters
-        this.correctLetters = {0: '', 1: '', 2: '', 3: '', 4: ''};
+        this.correctLetters = ['', '', '', '', ''];
 
-        // 
+        // initialise letter frequency at each position
+        this.scores = frequencyScoreWords(allWords, calculateLetterFrequencyCount(allWords));
 
     }
+}
+
+const checkWord = (guess, solution, gameClass) => {
+    // Remove letters from possible letters (these are added back if correct or misplaced)
+    for (let i = 0; i < 5; i++) {
+        gameClass.possibleLetters = gameClass.possibleLetters.filter(char => char !== guess[i]);
+    }
+
+    // Fill correct letters
+    for (let i = 0; i < 5; i++) {
+        if (guess[i] == solution[i]) {
+          gameClass.correctLetters[i] = guess[i];
+          gameClass.possibleLetters.push(guess[i]);
+        }
+    }
+
+    // Fill misplaced letters
+    for (let i = 0; i < 5; i++) {
+        if (gameClass.correctLetters[i] === '') {
+            for (let j = 0; j < 5; j++) {
+                if (guess[i] == solution[j]) {
+                    gameClass.misplacedLetters.push(guess[i]);
+                    gameClass.possibleLetters.push(guess[i]);
+                    break;
+                }
+            }
+        }
+    }
+
 }
 
 
 
 
 
-
-
 const words = getWords();
-const frequencyCount = calculateLetterFrequencyCount(words);
-const scores = frequencyScoreWords(words, frequencyCount);
+const myGame = new Game(words);
 
-console.log(scores.maxScore);
+checkWord('TEAMS', 'MATES', myGame);
+
+console.log(myGame);
 
