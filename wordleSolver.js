@@ -51,27 +51,6 @@ const frequencyScoreWords = (wordArray, letterFrequency) => {
     return { frequencyScores: frequencyScores, maxScore: maxScore };
 }
 
-// Create Wordle Game Class
-class Game {
-    constructor(allWords) {
-        // start with alphabet of possible letters
-        this.possibleLetters = ['A', 'B', 'C', 'D', 'E',  'F', 'G', 'H', 'I', 'J',  'K', 'L', 'M', 'N', 'O',  'P', 'Q', 'R', 'S', 'T',  'U', 'V', 'W', 'X', 'Y',  'Z'];
-
-        // Correct but misplaced
-        this.misplacedLetters = [];
-
-        // Possible Answers
-        this.possibleAnswers = [...allWords];
-
-        // Correct letters
-        this.correctLetters = ['', '', '', '', ''];
-
-        // initialise letter frequency at each position
-        this.scores = frequencyScoreWords(allWords, calculateLetterFrequencyCount(allWords));
-
-    }
-}
-
 const checkWord = (guess, solution, gameClass) => {
     // Remove letters from possible letters (these are added back if correct or misplaced)
     for (let i = 0; i < 5; i++) {
@@ -101,14 +80,81 @@ const checkWord = (guess, solution, gameClass) => {
 
 }
 
+// Create Wordle Game Class
+class Game {
+    constructor(allWords) {
+        // start with alphabet of possible letters
+        this.possibleLetters = ['A', 'B', 'C', 'D', 'E',  'F', 'G', 'H', 'I', 'J',  'K', 'L', 'M', 'N', 'O',  'P', 'Q', 'R', 'S', 'T',  'U', 'V', 'W', 'X', 'Y',  'Z'];
 
+        // Correct but misplaced
+        this.misplacedLetters = [];
 
+        // Possible Answers
+        this.possibleAnswers = [...allWords];
+
+        // Correct letters
+        this.correctLetters = ['', '', '', '', ''];
+
+        // initialise letter frequency at each position and sort by score
+        this.wordScores = frequencyScoreWords(allWords, calculateLetterFrequencyCount(allWords)).frequencyScores.sort((a, b) => b.score - a.score);
+    }
+
+    makeGuess() {
+        for (let word of this.wordScores) {
+
+        }
+    }
+
+    filterOutByPossibleLetters(guess) {
+        for (let char of guess) {
+            if (!(this.possibleLetters.includes(char))) {
+                
+                return false
+            }
+        }
+
+        return true
+    } 
+
+    filterOutByCorrectLetters(guess) {
+        for (let i = 0; i < 5; i++) {
+            if (this.correctLetters[i] !== '') {
+                if (this.correctLetters[i] !== guess[i]) {
+
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
+
+    filterOutByMisplacedLetters(guess) {
+        
+    }
+}
 
 
 const words = getWords();
 const myGame = new Game(words);
 
-checkWord('TEAMS', 'MATES', myGame);
+console.log(myGame.wordScores);
 
-console.log(myGame);
+// make a guess function
+const makeGuess = myGame => {
+
+}
+
+
+// function to play the game
+const playGame = (myGame, solution) => {
+    let i = 0;
+    let win = false;
+    while (i < 6 && !win) {
+        for (let word in myGame.scores) {
+            if ()
+        }
+    }
+}
+checkWord('TEAMS', 'MATES', myGame);
 
