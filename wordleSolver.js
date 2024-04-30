@@ -31,4 +31,55 @@ const calculateLetterFrequencyCount = wordArray => {
 
     return letterFrequency
 }
-console.log(calculateLetterFrequencyCount(getWords()));
+
+const frequencyScoreWords = (wordArray, letterFrequency) => {
+    let frequencyScores = [];
+    let maxScore = { word: '', score: 0 };
+
+    for (let word of wordArray) {
+        let score = 0;
+        for (let i = 0; i < word.length; i++) {
+            const positionScore = letterFrequency[i].get(word[i]);
+            score += positionScore;
+        }
+        if (score > maxScore.score) {
+            maxScore = { word: word, score: score }
+        }
+        frequencyScores.push({ word: word, score: score });
+    }
+
+    return { frequencyScores: frequencyScores, maxScore: maxScore };
+}
+
+// Create Wordle Game Class
+class Game {
+    constructor(allWords) {
+        // start with alphabet of possible letters
+        this.possibleLetters = ['A', 'B', 'C', 'D', 'E',  'F', 'G', 'H', 'I', 'J',  'K', 'L', 'M', 'N', 'O',  'P', 'Q', 'R', 'S', 'T',  'U', 'V', 'W', 'X', 'Y',  'Z'];
+
+        // Correct but misplaced
+        this.misplacedLetters = [];
+
+        // Possible Answers
+        this.possibleAnswers = [...allWords];
+
+        // Correct letters
+        this.correctLetters = {0: '', 1: '', 2: '', 3: '', 4: ''};
+
+        // 
+
+    }
+}
+
+
+
+
+
+
+
+const words = getWords();
+const frequencyCount = calculateLetterFrequencyCount(words);
+const scores = frequencyScoreWords(words, frequencyCount);
+
+console.log(scores.maxScore);
+
