@@ -85,7 +85,7 @@ const checkWord = (guess, solution, gameClass) => {
 // Create Wordle Game Class
 class Game {
     constructor(allWords) {
-        this.solution = 'LEAPS'
+        this.solution = 'MATEY'
 
         // start with alphabet of possible letters
         this.possibleLetters = ['A', 'B', 'C', 'D', 'E',  'F', 'G', 'H', 'I', 'J',  'K', 'L', 'M', 'N', 'O',  'P', 'Q', 'R', 'S', 'T',  'U', 'V', 'W', 'X', 'Y',  'Z'];
@@ -110,9 +110,12 @@ class Game {
                 checkWord(element.word, this.solution, this);
                 console.log(`Guessing ${element.word}`);
                 console.log(`Correct: ${this.correctLetters}`);
-                this.misplacedLetters.forEach(element => console.log(element.letter + element.index))
+                this.misplacedLetters.forEach(element => console.log(element.letter + element.index));
+                console.log(`Possible letters: ${this.possibleLetters}`);
 
                 return;
+            } else {
+                console.log(`${element.word} rejected!`)
             }
         }
     }
@@ -170,6 +173,7 @@ class Game {
 
         return isValid
     }
+
 }
 
 
