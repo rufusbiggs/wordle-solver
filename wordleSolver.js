@@ -114,8 +114,15 @@ class Game {
                 // this.misplacedLetters.forEach(element => console.log(element.letter + element.index));
                 // console.log(`Possible letters: ${this.possibleLetters}`);
 
-                return;
-            } else {
+                return element.word;
+            } 
+            // if (element.word == 'BENCH') {
+                
+            //     console.log(element.word);
+            //     return
+            // }
+            
+            else {
                 console.log(`${element.word} rejected!`)
             }
         }
@@ -129,7 +136,6 @@ class Game {
             }
             if (results[i] == 1) {
                 this.misplacedLetters.push({ letter: guess[i], index: i });
-                // gameClass.possibleLetters.push(guess[i]);
             }
             if (results[i] == 2) {
                 this.correctLetters[i] = guess[i];
@@ -182,10 +188,10 @@ class Game {
                     isValid = false
                 }
                 // if the guess has the misplaced letter but in an index which is already taken by a correct letter remove it
-                if (guess[i] == element.letter && this.correctLetters[i] != '') {
+                // if (guess[i] == element.letter && this.correctLetters[i] != '') {
 
-                    isValid = false
-                }
+                //     isValid = false
+                // }
             }
         });
 
@@ -198,9 +204,22 @@ class Game {
 const words = getWords();
 const myGame = new Game(words);
 
-myGame.makeGuess();
-myGame.updateAttributes('SLATE', [2,2,0,0,2]);
-myGame.makeGuess();
+let guess = myGame.makeGuess();
+myGame.updateAttributes(guess, [1,0,1,0,0]);
+guess = myGame.makeGuess();
+myGame.updateAttributes(guess, [0,2,1,1,0]);
+guess = myGame.makeGuess();
+myGame.updateAttributes(guess, [2,2,2,2,0]);
+guess = myGame.makeGuess();
+myGame.updateAttributes(guess, [2,2,2,2,1]);
+guess = myGame.makeGuess();
+
+// console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
+// console.log(myGame.filterOutByPossibleLetters('BENCH'));
+// console.log(myGame.filterOutByMisplacedLetters('BENCH'));
+// console.log(myGame.filterOutByCorrectLetters('BENCH'));
+// myGame.updateAttributes(guess, [2,2,2,0,2]);
+// guess = myGame.makeGuess();
 
 // make a guess function
 const makeGuess = myGame => {
