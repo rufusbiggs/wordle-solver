@@ -103,6 +103,23 @@ class Game {
         this.wordScores = frequencyScoreWords(allWords, calculateLetterFrequencyCount(allWords)).frequencyScores.sort((a, b) => b.score - a.score);
     }
 
+    reset(allWords) {
+        // start with alphabet of possible letters
+        this.possibleLetters = ['A', 'B', 'C', 'D', 'E',  'F', 'G', 'H', 'I', 'J',  'K', 'L', 'M', 'N', 'O',  'P', 'Q', 'R', 'S', 'T',  'U', 'V', 'W', 'X', 'Y',  'Z'];
+
+        // Correct but misplaced with index where it was geussed
+        this.misplacedLetters = [];
+
+        // Possible Answers
+        this.possibleAnswers = [...allWords];
+
+        // Correct letters
+        this.correctLetters = ['', '', '', '', ''];
+
+        // initialise letter frequency at each position and sort by score
+        this.wordScores = frequencyScoreWords(allWords, calculateLetterFrequencyCount(allWords)).frequencyScores.sort((a, b) => b.score - a.score);
+    }
+
     makeGuess() {
         for (let element of this.wordScores) {
             let validWord = this.filterOutByCorrectLetters(element.word) && this.filterOutByPossibleLetters(element.word) && this.filterOutByMisplacedLetters(element.word);
@@ -122,9 +139,9 @@ class Game {
             //     return
             // }
             
-            else {
-                console.log(`${element.word} rejected!`)
-            }
+            // else {
+            //     console.log(`${element.word} rejected!`)
+            // }
         }
     }
 
@@ -198,32 +215,74 @@ class Game {
         return isValid
     }
 
+    testing() {
+        let testingResults = {
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: [],
+            'failed': [],
+        }
+
+        const words = getWords();
+        
+        for (let word of words) {
+            let tries = 0;
+            // console.log(`The solution is: ${word}`)
+            while (tries < 6) {
+                checkWord(this.makeGuess(), word, this);
+                tries++;
+                if (this.correctLetters.join('') == word) {
+                    testingResults[tries].push(word);
+                    break;
+                }
+            }
+            if (tries == 6) {
+                testingResults.failed.push(word);
+            }
+            this.reset(words)
+        }
+
+        return testingResults;
+    }
+
 }
 
 
 const words = getWords();
 const myGame = new Game(words);
 
-let guess = myGame.makeGuess();
-myGame.updateAttributes(guess, [1,0,1,0,0]);
-guess = myGame.makeGuess();
-myGame.updateAttributes(guess, [0,2,1,1,0]);
-guess = myGame.makeGuess();
-myGame.updateAttributes(guess, [2,2,2,2,0]);
-guess = myGame.makeGuess();
-myGame.updateAttributes(guess, [2,2,2,2,1]);
-guess = myGame.makeGuess();
+// const results = myGame.testing();
+// console.log(results);
 
-// console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-// console.log(myGame.filterOutByPossibleLetters('BENCH'));
-// console.log(myGame.filterOutByMisplacedLetters('BENCH'));
-// console.log(myGame.filterOutByCorrectLetters('BENCH'));
+checkWord('SLATE', 'BENCH', myGame);
+
+let guess = myGame.makeGuess();
+checkWord(guess, 'BENCH', myGame);
+guess = myGame.makeGuess();
+checkWord(guess, 'BENCH', myGame);
+guess = myGame.makeGuess();
+checkWord(guess, 'BENCH', myGame);
+guess = myGame.makeGuess();
+checkWord(guess, 'BENCH', myGame);
+guess = myGame.makeGuess();
+checkWord(guess, 'BENCH', myGame);
+guess = myGame.makeGuess();
+// myGame.updateAttributes(guess, [0,2,1,2,2]);
+// guess = myGame.makeGuess();
+// myGame.updateAttributes(guess, [2,2,2,2,0]);
+// guess = myGame.makeGuess();
+// myGame.updateAttributes(guess, [2,2,2,2,1]);
+// guess = myGame.makeGuess();
+
+console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
+console.log(myGame.filterOutByPossibleLetters('BENCH'));
+console.log(myGame.filterOutByMisplacedLetters('BENCH'));
+console.log(myGame.filterOutByCorrectLetters('BENCH'));
 // myGame.updateAttributes(guess, [2,2,2,0,2]);
 // guess = myGame.makeGuess();
 
-// make a guess function
-const makeGuess = myGame => {
-
-}
 
 
