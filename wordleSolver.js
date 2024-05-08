@@ -128,7 +128,10 @@ class Game {
 
     makeGuess() {
         for (let element of this.wordScores) {
-            let validWord = this.filterOutIfGuessAlreadyUsed(element.word) && this.filterOutByCorrectLetters(element.word) && this.filterOutByPossibleLetters(element.word) && this.filterOutByMisplacedLetters(element.word);
+            const wordUsed = this.filterOutIfGuessAlreadyUsed(element.word);
+            const correctLetters = this.filterOutByCorrectLetters(element.word);
+            let validWord =  wordUsed && correctLetters && this.filterOutByPossibleLetters(element.word) && this.filterOutByMisplacedLetters(element.word);
+            console.log(`word: ${element.word}, guess used: ${}, correct letters: ${}, possible letters: ${}`);
             if (validWord) {
                 this.guessedWords.push(element.word);
                 return element.word;
@@ -260,11 +263,11 @@ class Game {
 const words = getWords();
 const myGame = new Game(words);
 
-const results = myGame.testing();
-console.log(results);
-const won = results[1].length + results[2].length + results[3].length + results[4].length + results[5].length + results[6].length;
-const lost = results[7].length;
-console.log(`won: ${won / words.length * 100}% --- lost: ${lost / words.length * 100}% --- unknown: ${(words.length - won - lost) / words.length * 100}%`)
+// const results = myGame.testing();
+// console.log(results);
+// const won = results[1].length + results[2].length + results[3].length + results[4].length + results[5].length + results[6].length;
+// const lost = results[7].length;
+// console.log(`won: ${won / words.length * 100}% --- lost: ${lost / words.length * 100}% --- unknown: ${(words.length - won - lost) / words.length * 100}%`)
 
 // const letterFrequency = calculateLetterFrequencyCount(words);
 // const unknownScores = frequencyScoreWords(results.unknown, letterFrequency);
@@ -304,17 +307,32 @@ console.log(`won: ${won / words.length * 100}% --- lost: ${lost / words.length *
 // checkWord(guess, solution, myGame);
 // console.log(guess);
 
+guess = myGame.makeGuess();
+console.log(guess);
+myGame.updateAttributes(guess, [1,0,0,0,0]);
+guess = myGame.makeGuess();
+console.log(guess);
+myGame.updateAttributes(guess, [0,1,1,1,0]);
+guess = myGame.makeGuess();
+console.log(guess);
+myGame.updateAttributes(guess, [0,2,1,1,0]);
+guess = myGame.makeGuess();
+console.log(guess);
+// myGame.updateAttributes(guess, [2,2,2,0,2]);
 // guess = myGame.makeGuess();
-// console.log(guess)
-// myGame.updateAttributes(guess, [0,0,0,0,1]);
+// console.log(guess);
+// myGame.updateAttributes(guess, [2,2,2,0,2]);
 // guess = myGame.makeGuess();
-// console.log(guess)
+// console.log(guess);
+// myGame.updateAttributes(guess, [2,2,2,0,2]);
+// guess = myGame.makeGuess();
+// console.log(guess);
 
 
 console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-console.log(myGame.filterOutByPossibleLetters('EBONY'));
-console.log(myGame.filterOutByMisplacedLetters('EBONY'));
-console.log(myGame.filterOutByCorrectLetters('EBONY'));
+// console.log(myGame.filterOutByPossibleLetters('EBONY'));
+// console.log(myGame.filterOutByMisplacedLetters('EBONY'));
+// console.log(myGame.filterOutByCorrectLetters('EBONY'));
 
 
 
