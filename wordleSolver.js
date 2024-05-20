@@ -256,66 +256,74 @@ class Game {
 
 }
 
+const calculateFeedback = (guess, solution) => {
+    let feedback = [0, 0, 0, 0, 0];
+    for (let i = 0; i < 5; i++) {
+        if (guess[i] == solution[i]) {
+            feedback[i] = 2;
+        }
+        else {
+            for (let j = 0; j < 5; j++) {
+                if (guess[i] == solution[j]) {
+                    feedback[i] = 1;
+                }
+            }
+        }
+    }
 
-const words = getWords();
-const myGame = new Game(words);
+    return feedback;
+}
 
-const results = myGame.testing();
-console.log(results);
-const won = results[1].length + results[2].length + results[3].length + results[4].length + results[5].length + results[6].length;
-const lost = results[7].length;
-console.log(`won: ${won / words.length * 100}% --- lost: ${lost / words.length * 100}% --- unknown: ${(words.length - won - lost) / words.length * 100}%`)
+const createFeedbackColours = array => {
+    const colourMap = {
+        0: '⬛',
+        1: '🟨', 
+        2: '🟩'  
+    }
 
-// const letterFrequency = calculateLetterFrequencyCount(words);
-// const unknownScores = frequencyScoreWords(results.unknown, letterFrequency);
-// console.log(unknownScores)
+    const colourBoxes = array.map(num => colourMap[num]).join('');
 
-// let count = 0;
-// let astes = [];
-// words.forEach(word => {
-//     let ending = word[2] + word[4];
-//     if (ending == 'OY') {
-//         count++;
-//         astes.push(word);
-//     }
-// })
-// console.log(count, astes)
-// const index = myGame.wordScores.findIndex(element => element.word == 'PASTE');
-// console.log(myGame.wordScores[index]);
+    return colourBoxes;
+}
 
+const startGame = () => {
+    const words = getWords();
+    const myGame = new Game(words);
+    console.log('Starting Wordle Solver...');
+
+    const solution = words[Math.floor(Math.random() * words.length)];
+    console.log(`Random Solution: ${solution}`);
+    console.log(`---`);
+
+    let guessCount = 1;
+
+    while ( guessCount < 7) {
+        let guess = myGame.makeGuess();
+        console.log(`Guess ${guessCount}: ${guess}`);
+
+        let feedbackArray = calculateFeedback(guess, solution);
+        let feedback = createFeedbackColours(feedbackArray);
+        console.log(`Feedback: ${feedback}`);
+        console.log(`...`)
+
+        myGame.updateAttributes(guess, feedbackArray);
+
+        if (guess == solution) {
+            console.log(`---`);
+            console.log(`Success! The word is ${solution}, this took ${guessCount} guesses!`);
+            break;
+        }
+        guessCount++
+    }
+
+
+} 
+startGame();
 // let solution = 'AFOOT';
 // let guess = myGame.makeGuess();
 // checkWord(guess, solution, myGame);
 // console.log(guess);
 // console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-// guess = myGame.makeGuess();
-// checkWord(guess, solution, myGame);
-// console.log(guess);
-// console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-// guess = myGame.makeGuess();
-// checkWord(guess, solution, myGame);
-// console.log(guess);
-// console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-// guess = myGame.makeGuess();
-// checkWord(guess, solution, myGame);
-// console.log(guess);
-// console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-// guess = myGame.makeGuess();
-// checkWord(guess, solution, myGame);
-// console.log(guess);
-
-// guess = myGame.makeGuess();
-// console.log(guess)
-// myGame.updateAttributes(guess, [0,0,0,0,1]);
-// guess = myGame.makeGuess();
-// console.log(guess)
-
-
-console.log(myGame.correctLetters, myGame.misplacedLetters, myGame.possibleLetters);
-console.log(myGame.filterOutByPossibleLetters('EBONY'));
-console.log(myGame.filterOutByMisplacedLetters('EBONY'));
-console.log(myGame.filterOutByCorrectLetters('EBONY'));
-
 
 
 
